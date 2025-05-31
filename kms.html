@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <title>Translator Bahasa Rahasia 💌</title>
+  <style>
+    body {
+      background: linear-gradient(135deg, #ff9a9e, #fecfef);
+      font-family: 'Segoe UI', sans-serif;
+      text-align: center;
+      padding: 40px;
+      color: #333;
+    }
+
+    h1 {
+      color: #fff;
+      text-shadow: 2px 2px 5px #c44;
+    }
+
+    textarea {
+      width: 80%;
+      height: 120px;
+      border-radius: 12px;
+      padding: 15px;
+      font-size: 16px;
+      border: 2px solid #fff;
+      resize: none;
+      margin-bottom: 10px;
+    }
+
+    button {
+      padding: 10px 20px;
+      margin: 10px 5px;
+      font-size: 16px;
+      border-radius: 8px;
+      border: none;
+      cursor: pointer;
+      background-color: #ff69b4;
+      color: white;
+      transition: background 0.3s;
+    }
+
+    .output {
+      margin-top: 20px;
+      padding: 20px;
+      background-color: white;
+      color: #000;
+      border-radius: 10px;
+      width: 80%;
+      margin-left: auto;
+      margin-right: auto;
+      box-shadow: 0 0 10px rgba(0,0,0,0.1);
+      font-size: 18px;
+    }
+  </style>
+</head>
+<body>
+
+  <h1>💖 rihanna sayang 💖</h1>
+
+  <button onclick="pasteText()">📋 Tempel</button><br>
+  <textarea id="inputText" placeholder="Tulis pesan kamu..."></textarea><br>
+
+  <button onclick="toRahasia()">Ke Bahasa Rahasia</button>
+  <button onclick="toNormal()">Ke Bahasa Indonesia</button>
+
+  <div class="output" id="outputText"></div>
+
+  <button onclick="copyText()">📎 Salin Hasil</button>
+
+  <script>
+    const layout = {
+      q: 'qwertyuiop',
+      a: 'asdfghjkl',
+      z: 'zxcvbnm'
+    };
+
+    function shiftChar(c, reverse = false) {
+      const isUpper = c === c.toUpperCase();
+      const char = c.toLowerCase();
+
+      for (let row in layout) {
+        const idx = layout[row].indexOf(char);
+        if (idx !== -1) {
+          const letters = layout[row];
+          const newIndex = reverse
+            ? (idx - 1 + letters.length) % letters.length
+            : (idx + 1) % letters.length;
+          const shifted = letters[newIndex];
+          return isUpper ? shifted.toUpperCase() : shifted;
+        }
+      }
+      return c;
+    }
+
+    function encode(text) {
+      return text.split('').map(c => shiftChar(c)).join('');
+    }
+
+    function decode(text) {
+      return text.split('').map(c => shiftChar(c, true)).join('');
+    }
+
+    function toRahasia() {
+      const input = document.getElementById("inputText").value;
+      const result = encode(input);
+      document.getElementById("outputText").innerText = result;
+    }
+
+    function toNormal() {
+      const input = document.getElementById("inputText").value;
+      const result = decode(input);
+      document.getElementById("outputText").innerText = result;
+    }
+
+    function copyText() {
+      const output = document.getElementById("outputText").innerText;
+      navigator.clipboard.writeText(output).then(() => {
+        alert("Hasil sudah disalin!");
+      });
+    }
+
+    function pasteText() {
+      navigator.clipboard.readText().then(text => {
+        document.getElementById("inputText").value = text;
+      });
+    }
+  </script>
+
+</body>
+</html>
